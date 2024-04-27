@@ -12,18 +12,21 @@ export const Stopwatch = () => {
   const [startTime, setStartTime] = useState(null);
   const intervalIdRef = useRef(null);
 
+  const convertToDisplayedTime = elapseTimeMs => {
+    const minutes = Math.floor(elapseTimeMs / (1000 * 60));
+    const seconds = Math.floor((elapseTimeMs % (1000 * 60)) / 1000);
+    const milliseconds = elapseTimeMs % 1000;
+    return `
+    ${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}
+    `;
+  }
+
   useEffect(() => {
     if (!isRunning) return;
     let elapseTimeMs = 0;
     intervalIdRef.current = setInterval(() => {
       elapseTimeMs = Date.now() - startTime + accumulatedTime;
-      const minutes = Math.floor(elapseTimeMs / (1000 * 60));
-      const seconds = Math.floor((elapseTimeMs % (1000 * 60)) / 1000);
-      const milliseconds = elapseTimeMs % 1000;
-      const nextDisplayedTime = `
-      ${minutes.toString().padStart(2, "0")}:
-      ${seconds.toString().padStart(2, "0")}.
-      ${milliseconds.toString().padStart(3, "0")}`;
+      const nextDisplayedTime = convertToDisplayedTime(elapseTimeMs);
       setDisplayedTime(nextDisplayedTime);
     }, 10);
 
