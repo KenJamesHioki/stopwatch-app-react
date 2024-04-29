@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import { memo } from "react";
 
-export const Button = memo(({ backgroundColor, onClick, children, disabled }) => {
-  console.log('button');
-  return <SButton backgroundColor={backgroundColor} onClick={onClick} disabled={disabled}>{children}</SButton>;
+export const Button = memo(({ backgroundColor, onClick, children, disabled, ...rest }) => {
+  return <SButton backgroundColor={backgroundColor} onClick={onClick} disabled={disabled} {...rest}>{children}</SButton>;
 });
 
 

@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 
-export const Title =({children})=>{
+export const Title =({children, ...rest})=>{
   return (
-    <STitle>
+    <STitle {...rest}>
       {children}
     </STitle>
   );

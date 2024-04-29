@@ -9,18 +9,19 @@ export const Stopwatch = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [accumulatedTime, setAccumulatedTime] = useState(0);
   const [displayedTime, setDisplayedTime] = useState("00:00.000");
-  // const [startTime, setStartTime] = useState(null);
   const intervalIdRef = useRef(null);
   const startTimeRef = useRef(null);
 
-  const convertToDisplayedTime = elapseTimeMs => {
+  const convertToDisplayedTime = (elapseTimeMs) => {
     const minutes = Math.floor(elapseTimeMs / (1000 * 60));
     const seconds = Math.floor((elapseTimeMs % (1000 * 60)) / 1000);
     const milliseconds = elapseTimeMs % 1000;
     return `
-    ${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}
+    ${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}
     `;
-  }
+  };
 
   useEffect(() => {
     if (!isRunning) return;
@@ -35,42 +36,58 @@ export const Stopwatch = () => {
       clearInterval(intervalIdRef.current);
       setAccumulatedTime(elapseTimeMs);
     };
-
   }, [isRunning]);
 
   const handleStart = useCallback(() => {
     setIsRunning(true);
     startTimeRef.current = Date.now();
-  },[]);
+  }, []);
 
   const handleStop = useCallback(() => {
     setIsRunning(false);
-  },[]);
+  }, []);
 
   const handleReset = useCallback(() => {
     setAccumulatedTime(0);
     setDisplayedTime("00:00.000");
-  },[]);
+  }, []);
 
   return (
     <SWrapper>
-      <Card backgroundColor="#eee" border="1px #ddd solid">
-        <Title>STOPWATCH</Title>
-        <Card backgroundColor="#fff" border="1px #ddd solid">
+      <SAppCard backgroundColor="#eee" border="1px #ddd solid">
+        <STitle>STOPWATCH</STitle>
+        <SStopwatchCard backgroundColor="#fff" border="1px #ddd solid">
           {displayedTime}
-        </Card>
+        </SStopwatchCard>
         <ActionButtons
           handleStart={handleStart}
           handleStop={handleStop}
           handleReset={handleReset}
           disabled={isRunning}
         />
-      </Card>
+      </SAppCard>
     </SWrapper>
   );
 };
 
 const SWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+`;
+
+const STitle = styled(Title)`
+  text-align: center;
+`;
+
+const SAppCard = styled(Card)`
   max-width: 800px;
-  margin: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const SStopwatchCard = styled(Card)`
+  text-align: center;
 `;
